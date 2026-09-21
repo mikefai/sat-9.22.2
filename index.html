@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026 Digital SAT Reading & Writing | Information and Ideas Module & Vocabulary Study</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-light">
+  <!-- Top Bar resembling Digital SAT Testing Interface -->
+  <header class="sat-header" role="banner">
+    <div class="header-left">
+      <span class="exam-title">Digital SAT 2026</span>
+      <span class="section-badge">Section 1: Reading and Writing</span>
+      <span class="domain-tag">Information and Ideas (28 Items)</span>
+    </div>
+    <div class="header-center">
+      <div class="timer-display" id="timer-box" aria-live="polite">
+        <span class="timer-icon" aria-hidden="true">⏱</span>
+        <span id="timer-text">42:00</span>
+        <button id="toggle-timer-btn" class="btn-ghost" title="Hide/Show Timer" aria-label="Toggle timer visibility">Hide</button>
+      </div>
+    </div>
+    <div class="header-right">
+      <button id="open-flashcards-btn" class="tool-btn btn-vocab-highlight" title="Open Vocabulary Flashcards (30 Academic & Macro terms)">
+        <span class="tool-icon">🗂️</span> Vocab Flashcards (30)
+      </button>
+      <button id="highlighter-btn" class="tool-btn" title="Highlight Selected Text">
+        <span class="tool-icon">🖍️</span> Highlight
+      </button>
+      <button id="open-review-btn" class="tool-btn" title="Open Question Navigator">
+        <span class="tool-icon">📋</span> Question Navigator
+      </button>
+      <button id="strikethrough-toggle-btn" class="tool-btn" title="Toggle Option Eliminator Mode" aria-pressed="false">
+        <span class="tool-icon">✂️</span> Eliminator: <strong id="eliminator-status">OFF</strong>
+      </button>
+      <button id="theme-toggle-btn" class="tool-btn" title="Toggle Dark/Light Mode" aria-label="Toggle theme">
+        <span id="theme-icon">🌙</span> Mode
+      </button>
+      <button id="finish-section-btn" class="tool-btn btn-finish" title="Finish Module & View Score Report">
+        <span class="tool-icon">📊</span> Finish Module
+      </button>
+    </div>
+  </header>
+
+  <!-- Subheader Navigation Bar -->
+  <nav class="question-nav-bar" aria-label="Question Navigation">
+    <div class="nav-container">
+      <div class="q-nav-scroll-wrapper">
+        <div class="q-selector-group">
+          <!-- 28 Question Tabs Injected Dynamically by app.js -->
+        </div>
+      </div>
+      <div class="nav-actions">
+        <button id="flag-btn" class="flag-toggle" aria-pressed="false" title="Keyboard shortcut: F">
+          <span class="flag-icon">🚩</span> Mark for Review
+        </button>
+        <button id="strategy-guide-btn" class="guide-toggle">
+          <span class="guide-icon">💡</span> Strategy Guide
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Question Container (Split Screen Layout) -->
+  <main class="sat-main-container">
+    <div class="split-viewport" id="split-viewport">
+      
+      <!-- Left Column: Passage & Stimulus -->
+      <section class="pane passage-pane" aria-labelledby="passage-heading">
+        <div class="pane-header">
+          <h2 id="passage-heading" class="pane-title">Passage Stimulus</h2>
+          <div class="word-counter" id="passage-word-count">114 words</div>
+        </div>
+        <div class="pane-content" id="passage-content-area">
+          <!-- Dynamic Passage Injection -->
+        </div>
+      </section>
+
+      <!-- Resizer divider for desktop -->
+      <div class="pane-divider" id="pane-divider" role="separator" aria-orientation="vertical" tabindex="0" title="Drag to resize panels"></div>
+
+      <!-- Right Column: Question Prompt, Options & Explanation -->
+      <section class="pane question-pane" aria-labelledby="question-heading">
+        <div class="pane-header">
+          <div class="q-meta">
+            <span class="q-index" id="current-q-index">Question 1 of 28</span>
+            <span class="q-domain-label" id="current-q-skill">Skill: Central Ideas and Details</span>
+          </div>
+          <div class="font-resizer" aria-label="Text Size Controls">
+            <button id="font-decrease" class="btn-sm" title="Decrease font size">A-</button>
+            <button id="font-increase" class="btn-sm" title="Increase font size">A+</button>
+          </div>
+        </div>
+
+        <div class="pane-content">
+          <!-- Single Task Prompt -->
+          <div class="question-prompt" id="question-prompt-text">
+            <!-- Dynamic Prompt Injection -->
+          </div>
+
+          <!-- Options Container -->
+          <fieldset class="options-group" id="options-container">
+            <legend class="sr-only">Answer Options</legend>
+            <!-- Dynamic Options Injection -->
+          </fieldset>
+
+          <!-- Interaction Footer Controls -->
+          <div class="question-footer-controls">
+            <button id="check-answer-btn" class="btn-primary" disabled>
+              Check Answer
+            </button>
+            <button id="reset-question-btn" class="btn-secondary">
+              Reset Selection
+            </button>
+          </div>
+
+          <!-- Explanation Panel (revealed after checking answer or clicking reveal) -->
+          <div class="explanation-container" id="explanation-container" hidden>
+            <div class="explanation-card">
+              <div class="result-header" id="result-badge">
+                <!-- Result Message -->
+              </div>
+
+              <div class="explanation-body">
+                <div class="correct-answer-rationale">
+                  <h3 class="rationale-title">✓ Correct Answer Rationale</h3>
+                  <div id="correct-rationale-text"></div>
+                </div>
+
+                <div class="distractor-rationale">
+                  <h3 class="distractor-title">✗ Why Other Options Fail (Distractor Analysis)</h3>
+                  <div class="distractor-list" id="distractor-analysis-list"></div>
+                </div>
+
+                <div class="international-tip-box">
+                  <h4 class="tip-title">🌍 International Student Pro-Tip</h4>
+                  <div id="international-tip-text"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Navigation Bar Footer -->
+  <footer class="sat-footer">
+    <div class="footer-left">
+      <span class="footer-info">2026 Digital SAT Practice: Information and Ideas (Module 2 Hard Calibration)</span>
+    </div>
+    <div class="footer-nav-buttons">
+      <button id="prev-btn" class="btn-nav" disabled>← Previous</button>
+      <button id="next-btn" class="btn-nav">Next →</button>
+    </div>
+  </footer>
+
+  <!-- Modal Dialog for Vocabulary Flashcards (B1/B2 to C1 Mastery) -->
+  <dialog id="flashcard-dialog" class="sat-dialog flashcard-dialog-modal">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <div class="fc-header-left">
+          <h2>🗂️ Academic Vocabulary Flashcards</h2>
+          <span class="fc-header-sub">30 High-Yield Terms for International SAT Candidates (B1/B2 $\rightarrow$ C1)</span>
+        </div>
+        <button id="close-flashcard-btn" class="btn-close" aria-label="Close dialog">✕</button>
+      </div>
+
+      <!-- Flashcard Controls & Filters -->
+      <div class="fc-filter-panel">
+        <div class="fc-search-box">
+          <input type="text" id="fc-search-input" placeholder="Search word, definition, or context..." aria-label="Search vocabulary">
+        </div>
+        <div class="fc-categories">
+          <button class="fc-cat-pill active" data-cat="all">All (30)</button>
+          <button class="fc-cat-pill" data-cat="Macroeconomics">Macro & Trade</button>
+          <button class="fc-cat-pill" data-cat="Finance">Finance & Currency</button>
+          <button class="fc-cat-pill" data-cat="Climate">Climate & Ecology</button>
+          <button class="fc-cat-pill" data-cat="Academic">Academic Register</button>
+        </div>
+      </div>
+
+      <!-- Mastery Progress Header -->
+      <div class="fc-mastery-bar-container">
+        <div class="fc-stats-row">
+          <span id="fc-card-counter" class="fc-counter-text">Card 1 of 30</span>
+          <div class="fc-mastery-tags">
+            <span id="fc-mastered-count" class="badge-mastered">0 Mastered</span>
+            <span id="fc-learning-count" class="badge-learning">30 Remaining</span>
+          </div>
+        </div>
+        <div class="fc-progress-track">
+          <div class="fc-progress-fill" id="fc-progress-bar" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- 3D Flashcard Presentation Viewport -->
+      <div class="dialog-scrollable fc-viewport">
+        <div id="flashcard-render-container" class="fc-render-zone">
+          <!-- Injected dynamically by vocab-data.js & app.js -->
+        </div>
+
+        <!-- Flashcard Action Bar -->
+        <div class="fc-actions-dock">
+          <button id="fc-prev-btn" class="btn-fc-nav" title="Previous card (Left Arrow)">← Previous</button>
+          
+          <div class="fc-mastery-action-group">
+            <button id="fc-learning-btn" class="btn-fc-learning" title="Mark as Still Learning (Key: 1)">
+              <span>🔄</span> Still Learning [1]
+            </button>
+            <button id="fc-flip-btn" class="btn-fc-flip" title="Flip Card (Spacebar)">
+              <span>↷</span> Flip Card [Space]
+            </button>
+            <button id="fc-mastered-btn" class="btn-fc-mastered" title="Mark as Mastered (Key: 2)">
+              <span>✓</span> Mastered [2]
+            </button>
+          </div>
+
+          <button id="fc-next-btn" class="btn-fc-nav" title="Next card (Right Arrow)">Next →</button>
+        </div>
+
+        <div class="fc-dock-secondary">
+          <button id="fc-shuffle-btn" class="btn-sm btn-ghost-tool">🔀 Shuffle Deck</button>
+          <span class="fc-hotkeys-hint">Shortcuts: <strong>Space</strong> Flip • <strong>←/→</strong> Nav • <strong>1</strong> Learning • <strong>2</strong> Mastered</span>
+        </div>
+      </div>
+
+    </div>
+  </dialog>
+
+  <!-- Modal Dialog for Question Navigator & Review Matrix (Bluebook Style) -->
+  <dialog id="review-dialog" class="sat-dialog review-dialog-large">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <div>
+          <h2>Question Navigator & Progress Review</h2>
+          <span class="review-stat-subtitle" id="review-score-stat">0 of 28 completed</span>
+        </div>
+        <button id="close-review-btn" class="btn-close" aria-label="Close dialog">✕</button>
+      </div>
+      <div class="review-filter-bar">
+        <button class="review-filter-btn active" data-filter="all" id="filter-all">All (28)</button>
+        <button class="review-filter-btn" data-filter="central" id="filter-central">Central Ideas (7)</button>
+        <button class="review-filter-btn" data-filter="inference" id="filter-inference">Inferences (7)</button>
+        <button class="review-filter-btn" data-filter="evidence" id="filter-evidence">Command of Evidence (14)</button>
+        <button class="review-filter-btn" data-filter="flagged" id="filter-flagged">🚩 Flagged</button>
+        <button class="review-filter-btn" data-filter="unanswered" id="filter-unanswered">○ Unanswered</button>
+      </div>
+      <div class="dialog-scrollable">
+        <div class="review-grid" id="review-grid-container">
+          <!-- 28 Cards Generated Dynamically by app.js -->
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Modal Dialog for Score Report & Diagnostic Analytics -->
+  <dialog id="score-dialog" class="sat-dialog score-dialog-modal">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <h2>📊 Module Diagnostic Score Report</h2>
+        <button id="close-score-btn" class="btn-close" aria-label="Close dialog">✕</button>
+      </div>
+      <div class="dialog-scrollable">
+        <div class="score-summary-banner">
+          <div class="score-box">
+            <span class="score-title">Estimated Reading & Writing Score</span>
+            <div class="score-number-highlight" id="score-scaled-number">-- / 800</div>
+          </div>
+          <div class="score-meta-grid">
+            <div class="meta-card">
+              <span class="meta-label">Raw Score</span>
+              <strong class="meta-val" id="score-big-number">0 / 28</strong>
+            </div>
+            <div class="meta-card">
+              <span class="meta-label">Overall Accuracy</span>
+              <strong class="meta-val" id="score-accuracy-pct">0%</strong>
+            </div>
+            <div class="meta-card">
+              <span class="meta-label">Difficulty Tier</span>
+              <strong class="meta-val tier-tag">Module 2 (Hard)</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="diagnostic-section">
+          <h3>Subskill Competency Breakdown</h3>
+          <div class="skill-breakdown-container" id="skill-breakdown-list">
+            <!-- Dynamic Skill Breakdown Rows -->
+          </div>
+        </div>
+
+        <div class="diagnostic-notes">
+          <h4>💡 2026 Digital SAT Scoring & Pacing Insights</h4>
+          <p>On the adaptive Digital SAT, achieving $\ge 80\%$ accuracy on Hard-tier Information & Ideas items places test-takers in the <strong>720–800 score band</strong> for the Reading & Writing section. Target pacing is approximately <strong>1 minute 15 seconds to 1 minute 30 seconds per question</strong>.</p>
+        </div>
+      </div>
+      <div class="dialog-footer">
+        <button id="return-to-review-btn" class="btn-primary">Review Questions</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Modal Dialog for Strategy Guide (Using Native Modern Dialog API) -->
+  <dialog id="strategy-dialog" class="sat-dialog">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <h2>Digital SAT: Information & Ideas Mastery for International Students</h2>
+        <button id="close-dialog-btn" class="btn-close" aria-label="Close dialog">✕</button>
+      </div>
+      <div class="dialog-scrollable">
+        <section class="guide-section">
+          <h3>1. Structure of "Information and Ideas"</h3>
+          <p>The Digital SAT Reading and Writing section dedicates approximately <strong>26% (12–14 questions per 54-item test)</strong> to the <em>Information and Ideas</em> domain. This module contains 28 high-level items spanning:</p>
+          <ul>
+            <li><strong>Central Ideas and Details:</strong> Extract the primary thesis without being trapped by hyper-specific, partially true details.</li>
+            <li><strong>Command of Evidence (Textual & Quantitative):</strong> Discern which qualitative citation or data trend directly validates, illustrates, or falsifies an academic claim.</li>
+            <li><strong>Inferences:</strong> Deduce the single, strictly unavoidable logical conclusion that completes an argument without extending past the passage's boundary.</li>
+          </ul>
+        </section>
+
+        <section class="guide-section">
+          <h3>2. Crucial Distractor Archetypes to Eliminate</h3>
+          <div class="distractor-grid">
+            <div class="distractor-card">
+              <h4>A. The Extreme Leap</h4>
+              <p>Uses definitive qualifiers like <em>solely, entirely, impossible, always</em> when the stimulus uses probabilistic language (<em>frequently, tend to, often</em>).</p>
+            </div>
+            <div class="distractor-card">
+              <h4>B. The Faulty Reversal</h4>
+              <p>Inverts cause-and-effect or conditional relationships (e.g., claiming high costs caused nearshoring rather than risk-mitigation justifying higher costs).</p>
+            </div>
+            <div class="distractor-card">
+              <h4>C. True in Reality, Unsupported in Text</h4>
+              <p>Relies on real-world background knowledge of economics or politics that is neither mentioned nor implied in the passage.</p>
+            </div>
+            <div class="distractor-card">
+              <h4>D. Quantitative Misdirection</h4>
+              <p>Cites accurate isolated numbers from the table but misrepresents the comparative trend or answers a different analytical question.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="guide-section">
+          <h3>3. Key Macroeconomic & Academic Glossary</h3>
+          <dl class="glossary-list">
+            <dt>Nearshoring / Friendshoring</dt>
+            <dd>Transferring business operations to nearby countries or diplomatically aligned nations rather than the lowest-cost distant hub.</dd>
+            <dt>Carbon Leakage & CBAM</dt>
+            <dd>When companies transfer production to countries with laxer emission standards, counteracted by carbon border taxes proportional to embedded carbon intensity.</dd>
+            <dt>Dutch Disease</dt>
+            <dd>When a natural resource export boom causes currency appreciation, making non-resource manufacturing and agriculture uncompetitive.</dd>
+            <dt>Parametric Insurance</dt>
+            <dd>Insurance contracts that automatically issue payouts based on objective index triggers (e.g. satellite rainfall data) without requiring manual on-site damage inspection.</dd>
+            <dt>Last-Mile Liquidity Bottleneck</dt>
+            <dd>The localized financial friction and conversion spreads incurred when digital funds are converted into local cash or bank deposits in recipient countries.</dd>
+          </dl>
+        </section>
+      </div>
+      <div class="dialog-footer">
+        <button id="dialog-got-it-btn" class="btn-primary">Return to Practice</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Load vocabulary deck first, then main application -->
+  <script src="vocab-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
